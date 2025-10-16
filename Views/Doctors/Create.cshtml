@@ -1,0 +1,97 @@
+@model PruebaCSharp.Models.Doctor
+
+@{
+    ViewData["Title"] = "Registrar Médico";
+}
+
+<h2>Registrar Nuevo Médico</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Nombre Completo</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Document" class="form-label">Documento de Identidad</label>
+                <input asp-for="Document" class="form-control" />
+                <span asp-validation-for="Document" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Specialty" class="form-label">Especialidad</label>
+                <input asp-for="Specialty" class="form-control" list="specialties" />
+                <datalist id="specialties">
+                    <option value="Cardiología" />
+                    <option value="Pediatría" />
+                    <option value="Ortopedia" />
+                    <option value="Neurología" />
+                    <option value="Dermatología" />
+                    <option value="Ginecología" />
+                    <option value="Medicina General" />
+                    <option value="Medicina de Emergencias" />
+                </datalist>
+                <span asp-validation-for="Specialty" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Phone" class="form-label">Teléfono</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Correo Electrónico</label>
+                <input asp-for="Email" class="form-control" type="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Registrar Médico</button>
+                <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Guías de Registro de Médicos</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="text-success">✓</i> El documento debe ser único</li>
+                    <li><i class="text-success">✓</i> Se requiere formato de correo válido</li>
+                    <li><i class="text-success">✓</i> La especialidad debe ser especificada</li>
+                    <li><i class="text-success">✓</i> Todos los campos son obligatorios</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Especialidades Comunes</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li>• Cardiología</li>
+                    <li>• Pediatría</li>
+                    <li>• Ortopedia</li>
+                    <li>• Neurología</li>
+                    <li>• Dermatología</li>
+                    <li>• Ginecología</li>
+                    <li>• Medicina General</li>
+                    <li>• Medicina de Emergencias</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

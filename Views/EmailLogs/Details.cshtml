@@ -1,0 +1,91 @@
+@model PruebaCSharp.Models.EmailLog
+
+@{
+    ViewData["Title"] = "Detalles del Correo";
+}
+
+<h2>Detalles del Correo Electrónico</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Información del Correo</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">ID del Correo:</dt>
+                    <dd class="col-sm-9">@Model.Id</dd>
+
+                    <dt class="col-sm-3">Paciente:</dt>
+                    <dd class="col-sm-9">@Model.Appointment.Patient.Name</dd>
+
+                    <dt class="col-sm-3">Médico:</dt>
+                    <dd class="col-sm-9">@Model.Appointment.Doctor.Name</dd>
+
+                    <dt class="col-sm-3">Especialidad:</dt>
+                    <dd class="col-sm-9">@Model.Appointment.Doctor.Specialty</dd>
+
+                    <dt class="col-sm-3">Fecha de Cita:</dt>
+                    <dd class="col-sm-9">@Model.Appointment.AppointmentDate.ToString("dddd, dd MMMM, yyyy")</dd>
+
+                    <dt class="col-sm-3">Hora de Cita:</dt>
+                    <dd class="col-sm-9">@Model.Appointment.AppointmentTime.ToString(@"hh\:mm")</dd>
+
+                    <dt class="col-sm-3">Correo Destinatario:</dt>
+                    <dd class="col-sm-9">@Model.RecipientEmail</dd>
+
+                    <dt class="col-sm-3">Asunto:</dt>
+                    <dd class="col-sm-9">@Model.Subject</dd>
+
+                    <dt class="col-sm-3">Estado:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.Status == PruebaCSharp.Models.EmailStatus.Sent)
+                        {
+                            <span class="badge bg-success">Enviado</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">No Enviado</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Fecha de Envío:</dt>
+                    <dd class="col-sm-9">@Model.SentAt.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <dt class="col-sm-3">Mensaje de Error:</dt>
+                        <dd class="col-sm-9">
+                            <div class="alert alert-danger">
+                                @Model.ErrorMessage
+                            </div>
+                        </dd>
+                    }
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Contenido del Correo</h5>
+            </div>
+            <div class="card-body">
+                <div class="border p-3 bg-light">
+                    <pre style="white-space: pre-wrap; font-family: Arial, sans-serif;">@Model.Body</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a class="btn btn-secondary" asp-action="Index">Volver al Historial</a>
+        <a class="btn btn-primary" asp-controller="Appointments" asp-action="Details" asp-route-id="@Model.AppointmentId">
+            Ver Cita Asociada
+        </a>
+    </div>
+</div>

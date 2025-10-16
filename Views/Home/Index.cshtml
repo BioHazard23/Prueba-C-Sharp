@@ -1,0 +1,150 @@
+﻿@model PruebaCSharp.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Panel Principal";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bienvenido al Hospital San Vicente</h1>
+    <p class="lead">Sistema de Gestión de Citas Médicas</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Total Pacientes</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-text">@Model?.TotalPatients</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Total Médicos</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-text">@Model?.TotalDoctors</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Total Citas</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-text">@Model?.TotalAppointments</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">
+                <h5 class="card-title">Citas Programadas</h5>
+            </div>
+            <div class="card-body">
+                <h2 class="card-text">@Model?.ScheduledAppointments</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Resumen de Estados de Citas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="text-success">
+                            <h4>@Model?.ScheduledAppointments</h4>
+                            <small>Programadas</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="text-primary">
+                            <h4>@Model?.AttendedAppointments</h4>
+                            <small>Atendidas</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="text-danger">
+                            <h4>@Model?.CancelledAppointments</h4>
+                            <small>Canceladas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Acciones Rápidas</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a class="btn btn-primary" asp-controller="Appointments" asp-action="Create">
+                        Agendar Nueva Cita
+                    </a>
+                    <a class="btn btn-success" asp-controller="Patients" asp-action="Create">
+                        Registrar Paciente
+                    </a>
+                    <a class="btn btn-info" asp-controller="Doctors" asp-action="Create">
+                        Registrar Médico
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model?.RecentAppointments != null && Model.RecentAppointments.Any())
+{
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Próximas Citas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Médico</th>
+                                    <th>Especialidad</th>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var appointment in Model.RecentAppointments)
+                                {
+                                    <tr>
+                                        <td>@appointment.Patient.Name</td>
+                                        <td>@appointment.Doctor.Name</td>
+                                        <td>@appointment.Doctor.Specialty</td>
+                                        <td>@appointment.AppointmentDate.ToString("dddd, dd MMMM, yyyy")</td>
+                                        <td>@appointment.AppointmentTime.ToString(@"hh\:mm")</td>
+                                        <td>
+                                            <span class="badge bg-@(appointment.Status.ToString() == "Scheduled" ? "success" : appointment.Status.ToString() == "Cancelled" ? "danger" : "primary")">
+                                                @(appointment.Status.ToString() == "Scheduled" ? "Programada" : appointment.Status.ToString() == "Cancelled" ? "Cancelada" : "Atendida")
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

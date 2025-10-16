@@ -1,0 +1,76 @@
+@model IEnumerable<PruebaCSharp.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Gestión de Médicos";
+}
+
+<h2>Gestión de Médicos</h2>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <a class="btn btn-primary" asp-action="Create">Registrar Nuevo Médico</a>
+    </div>
+    <div class="col-md-6">
+        <form asp-action="Index" method="get" class="d-flex">
+            <input type="text" name="specialty" class="form-control me-2" placeholder="Filtrar por especialidad..." value="@ViewBag.Specialty" />
+            <button type="submit" class="btn btn-outline-secondary">Filtrar</button>
+            @if (!string.IsNullOrEmpty(ViewBag.Specialty as string))
+            {
+                <a class="btn btn-outline-danger ms-2" asp-action="Index">Limpiar</a>
+            }
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Especialidad</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Document)</td>
+                    <td>
+                        <span class="badge bg-info">@Html.DisplayFor(modelItem => item.Specialty)</span>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Ver</a>
+                            <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <h4>No se encontraron médicos</h4>
+        @if (!string.IsNullOrEmpty(ViewBag.Specialty as string))
+        {
+            <p>No se encontraron médicos para la especialidad: <strong>@ViewBag.Specialty</strong></p>
+            <a class="btn btn-primary" asp-action="Index">Ver Todos los Médicos</a>
+        }
+        else
+        {
+            <p>Comience registrando el primer médico.</p>
+            <a class="btn btn-primary" asp-action="Create">Registrar Médico</a>
+        }
+    </div>
+}

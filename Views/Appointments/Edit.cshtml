@@ -1,0 +1,101 @@
+@model PruebaCSharp.Models.Appointment
+
+@{
+    ViewData["Title"] = "Editar Cita";
+}
+
+<h2>Editar Cita</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="mb-3">
+                <label asp-for="PatientId" class="form-label">Paciente</label>
+                <select asp-for="PatientId" class="form-select" asp-items="@(new SelectList(ViewBag.Patients as IEnumerable<PruebaCSharp.Models.Patient>, "Id", "Name"))">
+                    <option value="">-- Seleccionar Paciente --</option>
+                </select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="DoctorId" class="form-label">Médico</label>
+                <select asp-for="DoctorId" class="form-select" asp-items="@(new SelectList(ViewBag.Doctors as IEnumerable<PruebaCSharp.Models.Doctor>, "Id", "Name"))">
+                    <option value="">-- Seleccionar Médico --</option>
+                </select>
+                <span asp-validation-for="DoctorId" class="text-danger"></span>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="AppointmentDate" class="form-label">Fecha</label>
+                        <input asp-for="AppointmentDate" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="AppointmentTime" class="form-label">Hora</label>
+                        <input asp-for="AppointmentTime" class="form-control" type="time" />
+                        <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">Notas (Opcional)</label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Información de la Cita</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-5">Estado:</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-@(Model.Status.ToString() == "Scheduled" ? "success" : Model.Status.ToString() == "Cancelled" ? "danger" : "primary")">
+                            @(Model.Status.ToString() == "Scheduled" ? "Programada" : Model.Status.ToString() == "Cancelled" ? "Cancelada" : "Atendida")
+                        </span>
+                    </dd>
+                    
+                    <dt class="col-sm-5">Creada:</dt>
+                    <dd class="col-sm-7">@Model.CreatedAt.ToString("dd/MM/yyyy")</dd>
+                    
+                    <dt class="col-sm-5">Última Actualización:</dt>
+                    <dd class="col-sm-7">@Model.UpdatedAt.ToString("dd/MM/yyyy")</dd>
+                </dl>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Guías de Actualización</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="text-success">✓</i> La fecha debe ser hoy o futura</li>
+                    <li><i class="text-success">✓</i> No se permiten conflictos de horario</li>
+                    <li><i class="text-warning">⚠</i> Los cambios serán registrados</li>
+                    <li><i class="text-info">ℹ</i> Los cambios de estado requieren acciones separadas</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

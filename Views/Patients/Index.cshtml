@@ -1,0 +1,54 @@
+@model IEnumerable<PruebaCSharp.Models.Patient>
+
+@{
+    ViewData["Title"] = "Gestión de Pacientes";
+}
+
+<h2>Gestión de Pacientes</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Registrar Nuevo Paciente</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Edad</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Document)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Age)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Ver</a>
+                            <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <h4>No hay pacientes registrados</h4>
+        <p>Comience registrando el primer paciente.</p>
+        <a class="btn btn-primary" asp-action="Create">Registrar Paciente</a>
+    </div>
+}

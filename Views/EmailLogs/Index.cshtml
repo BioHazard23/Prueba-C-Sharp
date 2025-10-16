@@ -1,0 +1,85 @@
+@model IEnumerable<PruebaCSharp.Models.EmailLog>
+
+@{
+    ViewData["Title"] = "Historial de Correos";
+}
+
+<h2>Historial de Correos Electrónicos</h2>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Registros de Envío de Correos</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Paciente</th>
+                                    <th>Médico</th>
+                                    <th>Fecha de Cita</th>
+                                    <th>Hora de Cita</th>
+                                    <th>Correo Destinatario</th>
+                                    <th>Asunto</th>
+                                    <th>Estado</th>
+                                    <th>Fecha de Envío</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var emailLog in Model)
+                                {
+                                    <tr>
+                                        <td>@emailLog.Id</td>
+                                        <td>@emailLog.Appointment.Patient.Name</td>
+                                        <td>@emailLog.Appointment.Doctor.Name</td>
+                                        <td>@emailLog.Appointment.AppointmentDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@emailLog.Appointment.AppointmentTime.ToString(@"hh\:mm")</td>
+                                        <td>@emailLog.RecipientEmail</td>
+                                        <td>@emailLog.Subject</td>
+                                        <td>
+                                            @if (emailLog.Status == PruebaCSharp.Models.EmailStatus.Sent)
+                                            {
+                                                <span class="badge bg-success">Enviado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">No Enviado</span>
+                                            }
+                                        </td>
+                                        <td>@emailLog.SentAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@emailLog.Id">
+                                                Ver Detalles
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <h5>No hay registros de correos</h5>
+                        <p>No se han enviado correos de confirmación aún.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">
+            Volver al Panel Principal
+        </a>
+    </div>
+</div>

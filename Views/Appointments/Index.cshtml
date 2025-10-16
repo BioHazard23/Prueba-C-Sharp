@@ -1,0 +1,73 @@
+@model IEnumerable<PruebaCSharp.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Gestión de Citas Médicas";
+}
+
+<h2>Gestión de Citas Médicas</h2>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <a class="btn btn-primary" asp-action="Create">Agendar Nueva Cita</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Especialidad</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Patient.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Doctor.Name)</td>
+                    <td>
+                        <span class="badge bg-info">@Html.DisplayFor(modelItem => item.Doctor.Specialty)</span>
+                    </td>
+                    <td>@item.AppointmentDate.ToString("dd/MM/yyyy")</td>
+                    <td>@item.AppointmentTime.ToString(@"hh\:mm")</td>
+                    <td>
+                        <span class="badge bg-@(item.Status.ToString() == "Scheduled" ? "success" : item.Status.ToString() == "Cancelled" ? "danger" : "primary")">
+                            @(item.Status.ToString() == "Scheduled" ? "Programada" : item.Status.ToString() == "Cancelled" ? "Cancelada" : "Atendida")
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Ver</a>
+                            <a class="btn btn-sm btn-outline-warning" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+                            @if (item.Status == PruebaCSharp.Models.AppointmentStatus.Scheduled)
+                            {
+                                <form asp-action="Cancel" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Está seguro de que desea cancelar esta cita?')">Cancelar</button>
+                                </form>
+                                <form asp-action="MarkAttended" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-success" onclick="return confirm('¿Marcar esta cita como atendida?')">Atendida</button>
+                                </form>
+                            }
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <h4>No hay citas programadas</h4>
+        <p>Comience agendando la primera cita.</p>
+        <a class="btn btn-primary" asp-action="Create">Agendar Cita</a>
+    </div>
+}
