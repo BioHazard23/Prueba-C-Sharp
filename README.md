@@ -30,7 +30,7 @@ Web application developed in **C# ASP.NET Core** for comprehensive management of
 
 ### 1. Clone the Repository
 ```bash
-git clone <https://github.com/BioHazard23/CSharp-Prueba.git>
+git clone https://github.com/BioHazard23/Prueba-C-Sharp.git
 cd CSharp-Prueba
 ```
 
